@@ -30,7 +30,9 @@ export class HomeComponent implements OnInit {
   }
 
   searchItems(): void {
-    this.items = this.itemService.search(this.searchControl.value);
+    this.itemService.search(this.searchControl.value).subscribe((items) => {
+      this.items = items;
+    });
   }
 
   openItem(item: Item): void {

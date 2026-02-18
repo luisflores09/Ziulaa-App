@@ -95,3 +95,57 @@ The theme defines:
 ## Notes
 
 - The `Search` and `About` links currently route to the Home screen (UI is in place; routes exist). If you want separate pages, add minimal standalone components and update [src/app/app.routes.ts](src/app/app.routes.ts).
+
+## RapidAPI + Secrets (S3-friendly)
+
+Because this is an Angular SPA hosted on S3, you **cannot** safely keep secrets (like `X-RapidAPI-Key`) in the front-end. Any value shipped to the browser can be extracted.
+
+### Recommended Architecture
+
+- S3 + CloudFront hosts the Angular app
+- API Gateway + Lambda provides a backend endpoint (`/api/search?q=...`)
+- Lambda calls RapidAPI and keeps the RapidAPI key **server-side**
+- Store the RapidAPI key/host server-side (best: Parameter Store/Secrets Manager; cheapest/simplest: Lambda env vars)
+
+### Backend Proxy (SAM)
+
+This repo includes a minimal proxy Lambda:
+- Lambda handler: [backend/lambda/rapidapi-proxy/index.mjs](backend/lambda/rapidapi-proxy/index.mjs)
+- SAM template: [template.yaml](template.yaml)
+
+#### Manual ($0-friendly) secrets approach
+
+If your goal is to stay at $0 and keep things simple, you can set the RapidAPI key/host as **Lambda environment variables**.
+
+Important: environment variables are still **not public to the browser**, but anyone with AWS access to the Lambda can view them.
+
+#### 1) Deploy the API (SAM)
+
+Install AWS SAM CLI, then:
+
+```bash
+sam build
+sam deploy --guided
+```
+
+During deployment (or after), set these Lambda environment variables:
+- `RAPIDAPI_SEARCH_URL` (non-secret; the RapidAPI endpoint URL)
+- `RAPIDAPI_KEY` (secret)
+- `RAPIDAPI_HOST` (often required by RapidAPI providers)
+
+#### 2) Configure the Angular app to use the proxy
+
+Client config (safe to commit):
+- [src/environments/environment.ts](src/environments/environment.ts)
+
+If you are proxying `/api/*` through CloudFront to API Gateway, you can keep `baseUrl` empty and use the default `searchPath: '/api/search'`.
+
+If API Gateway is on a separate domain, set `baseUrl` to your API endpoint (e.g., the `ApiUrl` output from SAM).
+
+### Alternative: Lambda Function URL (no API Gateway)
+
+You can also enable a **Lambda Function URL** (Auth type: NONE) and call it directly from the Angular app.
+
+In that case:
+- Set `environment.api.baseUrl` to the Function URL (no trailing slash)
+- Set `environment.api.searchPath` to an empty string (`''`)

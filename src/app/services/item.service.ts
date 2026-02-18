@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+
+import { environment } from '../../environments/environment';
 import { Item } from '../models/item';
+import { RapidApiProductsService } from './rapidapi-products.service';
 
 @Injectable({ providedIn: 'root' })
 export class ItemService {
+  constructor(private readonly rapidApi: RapidApiProductsService) {}
+
   private readonly items: Item[] = [
     {
       id: '1',
@@ -64,15 +70,30 @@ export class ItemService {
     return [...this.items];
   }
 
-  search(query: string): Item[] {
+  search(query: string): Observable<Item[]> {
     const normalized = query.trim().toLowerCase();
     if (!normalized) {
-      return this.getFeaturedItems();
+      return of(this.getFeaturedItems());
     }
 
-    return this.items.filter((item) => {
-      const haystack = `${item.name} ${item.shortDescription} ${item.description}`.toLowerCase();
-      return haystack.includes(normalized);
-    });
+    // If a proxy endpoint is configured, prefer real data.
+    if (this.isApiConfigured()) {
+      return this.rapidApi.search(normalized);
+    }
+
+    return of(
+      this.items.filter((item) => {
+        const haystack = `${item.name} ${item.shortDescription} ${item.description}`.toLowerCase();
+        return haystack.includes(normalized);
+      })
+    );
+  }
+
+  private isApiConfigured(): boolean {
+    const baseUrl = environment.api.baseUrl?.trim() || '';
+    const path = environment.api.searchPath?.trim() || '';
+
+    // If you're using CloudFront routing, path alone is enough.
+    return Boolean(path) || Boolean(baseUrl);
   }
 }

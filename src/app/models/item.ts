@@ -4,5 +4,11 @@ export interface Item {
   shortDescription: string;
   description: string;
   price: number;
+  priceText?: string;
   imageUrl: string;
+
+  source?: string;
+  link?: string;
+  rating?: number;
+  ratingCount?: number;
 }

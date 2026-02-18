@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Price Scout RapidAPI proxy (API Gateway + Lambda)
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 15
+    MemorySize: 256
+
+Resources:
+  PriceScoutApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowHeaders:
+          - content-type
+        AllowMethods:
+          - GET
+          - OPTIONS
+
+  RapidApiProxyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/lambda/rapidapi-proxy/
+      Handler: index.handler
+      Environment:
+        Variables:
+          # Non-secret: RapidAPI endpoint URL (include the full path)
+          # Example: https://YOUR-PROVIDER.p.rapidapi.com/search
+          RAPIDAPI_SEARCH_URL: ''
+
+          # Secrets for RapidAPI (set these in Lambda env vars; do not put them in Angular)
+          RAPIDAPI_KEY: ''
+          RAPIDAPI_HOST: ''
+
+          # Restrict this in production to your CloudFront domain
+          CORS_ALLOW_ORIGIN: '*'
+      Events:
+        Search:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref PriceScoutApi
+            Path: /api/search
+            Method: GET
+
+Outputs:
+  ApiUrl:
+    Description: HTTP API endpoint
+    Value: !GetAtt PriceScoutApi.ApiEndpoint
