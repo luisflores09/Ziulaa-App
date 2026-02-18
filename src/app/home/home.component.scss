@@ -1,0 +1,87 @@
+.hero {
+  background: var(--app-peach-soft);
+  border: 1px solid var(--app-divider);
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.hero-inner {
+  max-width: 900px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin-top: 10px;
+  color: var(--app-muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.search {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-card {
+  width: 100%;
+  max-width: 760px;
+  padding: 10px 12px;
+}
+
+.search-field {
+  width: 100%;
+}
+
+.featured {
+  margin-top: 22px;
+}
+
+.section-header h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.item-card {
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.item-card:focus {
+  outline: 3px solid color-mix(in srgb, var(--app-peach) 35%, transparent);
+  outline-offset: 2px;
+}
+
+.card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.item-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.price {
+  font-weight: 700;
+}
+
+.desc {
+  margin: 10px 0 0;
+  color: var(--app-muted);
+}

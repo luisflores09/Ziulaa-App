@@ -1,0 +1,60 @@
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Welcome to Price Scout!</h1>
+    <p class="subtitle">
+      Search and compare grocery prices quickly, so you can shop smarter.
+    </p>
+  </div>
+</section>
+
+<section class="search">
+  <mat-card class="search-card">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search items</mat-label>
+      <input
+        matInput
+        [formControl]="searchControl"
+        (keyup.enter)="searchItems()"
+        placeholder="Try 'milk', 'eggs', 'tomatoes'..."
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="searchItems()"
+        aria-label="Search"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </mat-card>
+</section>
+
+<section class="featured">
+  <div class="section-header">
+    <h2>Featured Items</h2>
+  </div>
+
+  <div class="card-grid">
+    <mat-card
+      class="item-card"
+      *ngFor="let item of items"
+      (click)="openItem(item)"
+      (keydown.enter)="openItem(item)"
+      tabindex="0"
+      role="button"
+      aria-label="Open item details"
+    >
+      <img mat-card-image [src]="item.imageUrl" [alt]="item.name" />
+
+      <mat-card-content>
+        <div class="card-top">
+          <h3 class="item-name">{{ item.name }}</h3>
+          <div class="price">{{ item.price | currency }}</div>
+        </div>
+
+        <p class="desc">{{ item.shortDescription }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

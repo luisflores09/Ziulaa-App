@@ -1,1 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+@use './styles/material-theme';
+
+/* Global app layout helpers */
+* {
+	box-sizing: border-box;
+}

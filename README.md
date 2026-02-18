@@ -1,59 +1,97 @@
-# ZiulaaApp
+# Price Scout (Ziulaa App)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.10.
+Price Scout is a grocery pricing front-end built with Angular + Angular Material.
 
-## Development server
+It ships with:
+- A custom Peach/White Angular Material theme applied globally
+- A responsive top navigation bar (Home / Search / About)
+- A Home screen with a hero section, centered search bar, and a responsive grid of featured item cards
+- A reusable full-screen Item Detail dialog (MatDialog) opened when a card is clicked
 
-To start a local development server, run:
+## Tech Stack
 
-```bash
-ng serve
-```
+- Angular (standalone) + Angular Router
+- Angular Material + CDK
+- SCSS theming
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Getting Started
 
-## Code scaffolding
+### Prerequisites
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js (LTS recommended)
+- npm
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Install
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Run (dev)
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
+Open `http://localhost:4200/`.
 
-For end-to-end (e2e) testing, run:
+### Test
 
 ```bash
-ng e2e
+npm test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Build
 
-## Additional Resources
+```bash
+npm run build
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## UI Overview
+
+### Top Navigation
+
+The toolbar uses Angular Material `mat-toolbar` and collapses to a menu on mobile.
+
+### Home
+
+- Hero: “Welcome to Price Scout!” + subtitle
+- Search: `mat-form-field` + input + search icon button
+	- Enter or clicking the icon triggers `searchItems()`
+- Featured items: responsive card grid using `mat-card`
+	- Clicking a card opens the Item dialog
+
+### Item Detail Dialog
+
+Opened via `MatDialog` and sized to ~90% of the viewport.
+- Large image
+- Item name, full description, pricing
+- Close button
+
+## Theme
+
+Global Angular Material theme lives in:
+- [src/styles/_material-theme.scss](src/styles/_material-theme.scss)
+
+It is applied globally via:
+- [src/styles.scss](src/styles.scss)
+
+The theme defines:
+- Peach as the primary color
+- White background
+- Soft gray/light peach accents for surfaces and dividers
+
+## Project Structure (key files)
+
+- App shell + toolbar: [src/app/app.component.html](src/app/app.component.html)
+- Routes: [src/app/app.routes.ts](src/app/app.routes.ts)
+- Routing module (forRoot): [src/app/app-routing.module.ts](src/app/app-routing.module.ts)
+- Material module (imports/exports): [src/app/material/material.module.ts](src/app/material/material.module.ts)
+- Home component: [src/app/home/home.component.ts](src/app/home/home.component.ts)
+- Item dialog component: [src/app/item-dialog/item-dialog.component.ts](src/app/item-dialog/item-dialog.component.ts)
+- Mock data/service: [src/app/services/item.service.ts](src/app/services/item.service.ts)
+- Item model: [src/app/models/item.ts](src/app/models/item.ts)
+
+## Notes
+
+- The `Search` and `About` links currently route to the Home screen (UI is in place; routes exist). If you want separate pages, add minimal standalone components and update [src/app/app.routes.ts](src/app/app.routes.ts).

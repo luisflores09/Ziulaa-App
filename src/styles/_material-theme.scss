@@ -1,0 +1,75 @@
+@use '@angular/material' as mat;
+
+// --- Peach palette (custom) ---
+$peach-palette: (
+  50: #fff3ee,
+  100: #ffe1d6,
+  200: #ffcdbd,
+  300: #ffb7a0,
+  400: #ffa58a,
+  500: #ff9474,
+  600: #ff8663,
+  700: #ff744e,
+  800: #ff643b,
+  900: #ff4a1b,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: rgba(0, 0, 0, 0.87),
+    600: rgba(0, 0, 0, 0.87),
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+  )
+);
+
+$primary: mat.m2-define-palette($peach-palette, 500, 100, 700);
+$accent: mat.m2-define-palette(mat.$m2-grey-palette, 200, 100, 400);
+$warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+@include mat.core();
+@include mat.all-component-themes($theme);
+
+// --- App surface + accents (soft peach/gray) ---
+:root {
+  --app-peach: #ff9474;
+  --app-peach-soft: #fff3ee;
+  --app-bg: #ffffff;
+  --app-text: rgba(0, 0, 0, 0.87);
+  --app-muted: rgba(0, 0, 0, 0.6);
+  --app-divider: rgba(0, 0, 0, 0.08);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+// Subtle polish for common Material surfaces
+.mat-mdc-card {
+  border: 1px solid var(--app-divider);
+}
+
+// Make dialogs feel clean and spacious
+.item-dialog-panel .mat-mdc-dialog-container {
+  border-radius: 16px;
+}

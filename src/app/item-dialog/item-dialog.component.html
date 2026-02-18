@@ -1,0 +1,27 @@
+<div class="dialog">
+  <div class="media">
+    <img class="image" [src]="item.imageUrl" [alt]="item.name" />
+  </div>
+
+  <div class="details">
+    <div class="header">
+      <div class="title-block">
+        <h2 class="title">{{ item.name }}</h2>
+        <div class="price">{{ item.price | currency }}</div>
+      </div>
+
+      <button mat-stroked-button type="button" (click)="close()">Close</button>
+    </div>
+
+    <p class="description">{{ item.description }}</p>
+
+    <mat-card class="pricing">
+      <mat-card-content>
+        <div class="pricing-row">
+          <span class="label">Current price</span>
+          <span class="value">{{ item.price | currency }}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
